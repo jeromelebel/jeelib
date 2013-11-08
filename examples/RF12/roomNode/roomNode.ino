@@ -26,6 +26,7 @@
 #define RETRY_LIMIT     5   // maximum number of times to retry
 #define ACK_TIME        10  // number of milliseconds to wait for an ack
 #define REPORT_EVERY    5   // report every N measurement cycles
+#define SMOOTH_ENABLED  0
 #define SMOOTH          3   // smoothing factor used for running averages
 
 // set the sync mode to 2 if the fuses are still the Arduino default
@@ -161,14 +162,23 @@ static void doMeasure() {
         //XXX TINY!
         int humi = 50, temp = 25;
 #endif
+#if SMOOTH_ENABLED
         payload.humi = smoothedAverage(payload.humi, humi, firstTime);
         payload.temp = smoothedAverage(payload.temp, temp, firstTime);
+#else
+        payload.humi = humi;
+        payload.temp = temp;
+#endif
     #endif
     #if LDR_PORT
         ldr.digiWrite2(1);  // enable AIO pull-up
         byte light = ~ ldr.anaRead() >> 2;
         ldr.digiWrite2(0);  // disable pull-up to reduce current draw
+#if SMOOTH_ENABLED
         payload.light = smoothedAverage(payload.light, light, firstTime);
+#else
+        payload.light = light;
+#endif
     #endif
     #if PIR_PORT
         payload.moved = pir.state();
