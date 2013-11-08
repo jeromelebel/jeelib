@@ -49,7 +49,7 @@ static byte myNodeID;       // node ID used for this unit
 struct {
     byte light;     // light sensor: 0..255
     byte moved :1;  // motion detector: 0..1
-    byte humi  :7;  // humidity: 0..100
+    unsigned short humi  :10;  // humidity: 0..100
     int temp   :10; // temperature: -500..+500 (tenths)
     byte lobat :1;  // supply voltage dropped under 3.1V: 0..1
 } payload;
@@ -156,7 +156,7 @@ static void doMeasure() {
         sht11.measure(SHT11::TEMP, shtDelay);
         float h, t;
         sht11.calculate(h, t);
-        int humi = h + 0.5, temp = 10 * t + 0.5;
+        int humi = 10 * h + 0.5, temp = 10 * t + 0.5;
 #else
         //XXX TINY!
         int humi = 50, temp = 25;
