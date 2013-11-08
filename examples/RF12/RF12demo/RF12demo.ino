@@ -15,7 +15,7 @@
 #if defined(__AVR_ATtiny84__) ||defined(__AVR_ATtiny44__)
 #define SERIAL_BAUD 38400
 #else
-#define SERIAL_BAUD 57600
+#define SERIAL_BAUD 115200
 
 #define DATAFLASH 1 // check for presence of DataFlash memory on JeeLink
 #define FLASH_MBIT  16  // support for various dataflash sizes: 4/8/16 Mbit
